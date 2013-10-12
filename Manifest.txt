@@ -1,0 +1,6 @@
+History.md
+Manifest.txt
+README.md
+Rakefile
+lib/dbbrowser.rb
+lib/dbbrowser/version.rb
