@@ -1,0 +1,16 @@
+
+<h2>## <%= key %> ##</h2>
+
+<pre>
+<%= ActiveRecord::Base.configurations[key].inspect %>
+</pre>
+
+
+<%= render_tables( tables ) %>
+
+
+<% tables.each do |table| %>
+<h4>### <%= table.name %> ###</h4>
+
+<%= render_table_def( table ) %>
+<% end %>

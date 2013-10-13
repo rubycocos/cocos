@@ -1,0 +1,13 @@
+
+<h3>Tables
+ <span class='count'>(<%= tables.size %>)</span>
+</h3>
+
+<table>
+<% tables.each do |table| %>
+ <tr>
+  <td><%= link_to table.name, table_path( table ) %></td>
+  <td style='text-align: right;'><%= table.count %> recs</td>
+ </tr>
+<% end %>
+</table>

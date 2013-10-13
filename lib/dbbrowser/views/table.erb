@@ -1,0 +1,43 @@
+
+<h2><%= table.name %>
+    <span class='count'>(<%= table.count %>)</span>
+</h2>
+
+
+<%= render_table_def( table ) %>
+
+
+<% result = table.query() %>
+<% if result.error? %>
+    <p>
+        ERROR: <%= result.error %>
+    </p>
+<% else %>
+  <table>
+  <% result.rows.each do |row| %>
+    <tr>
+      <% row.each do |key,value| %>
+
+           <% if ['id','created_at', 'updated_at'].include?( key ) %>
+             <td class='key'>
+           <% else %>
+             <td>
+           <% end %>
+
+            <span title='<%= key %> : <%= value.class.name %>'>
+           <% if value.nil? %>
+             NULL <!-- fix/todo: use special char for null?? -->
+           <% else %>
+               <% if value.kind_of?( String ) %>
+                   <%= h( value[0..80] ) %>   <!-- cut off after 80 chars; escape html use h-helper -->
+               <% else %>
+                   <%= value %>
+               <% end %>
+           <% end %>
+             </span>
+         </td>
+      <% end %>
+    </tr>
+  <% end %>
+  </table>
+<% end %>

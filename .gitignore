@@ -16,3 +16,10 @@ tmp
 .yardoc
 _yardoc
 doc/
+
+
+####
+# ignore db for testing
+
+pluto.db
+*.db

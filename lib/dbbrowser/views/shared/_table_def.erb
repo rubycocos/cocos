@@ -1,0 +1,14 @@
+
+<table>
+<% table.columns.each do |col| %>
+ <tr>
+  <td><%= col.name %></td>
+  <td><%= col.type %></td>
+  <td><%= col.default %></td>
+  <td><% unless col.null %>
+        NOT NULL
+      <% end %>
+  </td>
+ </tr>
+<% end %>
+</table>

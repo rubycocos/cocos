@@ -3,4 +3,16 @@ Manifest.txt
 README.md
 Rakefile
 lib/dbbrowser.rb
+lib/dbbrowser/connection.rb
+lib/dbbrowser/public/style.css
+lib/dbbrowser/server.rb
 lib/dbbrowser/version.rb
+lib/dbbrowser/views/db.erb
+lib/dbbrowser/views/debug.erb
+lib/dbbrowser/views/index.erb
+lib/dbbrowser/views/layout.erb
+lib/dbbrowser/views/shared/_debug.erb
+lib/dbbrowser/views/shared/_table_def.erb
+lib/dbbrowser/views/shared/_tables.erb
+lib/dbbrowser/views/shared/_version.erb
+lib/dbbrowser/views/table.erb

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <title>DB Browser</title>
+  <link href="<%= url('/style.css') %>" rel='stylesheet'>
+</head>
+<body>
+
+<p>
+  <%= link_to 'DB Browser', root_path(), class: 'nav' %> |
+  <% ActiveRecord::Base.configurations.keys.each do |key| %>
+     <%= link_to key, db_path( key ) %>
+  <% end %>
+</p>
+
+<%= yield %>
+
+<%= erb :'shared/_version' %>
+
+</body>
+</html>
