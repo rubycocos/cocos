@@ -11,12 +11,27 @@ class ConnectionMan  # connection manager
 
   def connection_for( key )
     # cache connections - needed? why? why not??
-    con = CONNECTS[ key ] ||= AbstractModel.connection_for( key )
+
+    #  hack: for now only use cached connection if still active
+    #   if not; get a new one to avoid connection closed errors in rails
+    con = CONNECTS[ key ]
+    if con
+      puts "[ConnectionMan] cached connection found; con.active? #{con.active?}"
+      unless con.active?
+        puts "[ConnectionMan] *** reset cached connection (reason: connection stale/closed/not active)"
+        con = CONNECTS[ key ] = nil
+      end
+    end
+
+    if con.nil?
+      con = CONNECTS[ key ] =  AbstractModel.connection_for( key )
+    end
 
     # note: make sure connection is active?
     #  use verify!  - will try active? followed by reconnect!
     # - todo: check ourselves if active? - why? why not??
-    con.verify!
+    #  -- not working w/ rails - after verify! still getting error w/ closed connection
+    # -- con.verify!
 
     # wrap ActiveRecord connection in our own connection class
     Connection.new( con, key )
