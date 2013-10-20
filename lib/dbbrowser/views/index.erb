@@ -2,9 +2,8 @@
 <% ActiveRecord::Base.configurations.keys.each do |key| %>
 
 <h2>## <%= key %> ##</h2>
-<pre>
-<%= ActiveRecord::Base.configurations[key].inspect %>
-</pre>
+
+<%= render_spec_for( key ) %>
 
 <%= render_tables_for( key ) %> 
 

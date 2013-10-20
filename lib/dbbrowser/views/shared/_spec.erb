@@ -1,0 +1,17 @@
+
+<h3>Connection Spec</h3>
+
+<table>
+<% spec.each do |key,value| %>
+  <tr>
+    <td><%= key %></td>
+    <td>
+      <% if key.to_s =~ /password/i %>
+         *********
+      <% else %>
+        <%= value %>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+</table>

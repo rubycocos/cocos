@@ -52,6 +52,13 @@ class Server < Sinatra::Base
     Rack::Utils.escape_html(text)
   end
 
+  def render_spec_for( key, opts={} )
+    # render connection spec(ification) aka configuration
+    spec = ActiveRecord::Base.configurations[ key ]
+    erb( 'shared/_spec'.to_sym,
+         layout: false,
+         locals: { spec: spec })
+  end
 
   def render_table_def( table, opts={} )
     erb( 'shared/_table_def'.to_sym,
@@ -66,7 +73,7 @@ class Server < Sinatra::Base
   end
 
   def render_tables_for( key, opts={} )
-    con = settings.man.connection( key )
+    con = settings.man.connection_for( key )
     erb( 'shared/_tables'.to_sym,
          layout: false,
          locals: { tables: con.tables } )
@@ -81,13 +88,13 @@ class Server < Sinatra::Base
   end
 
   get '/db/:key/:table_name' do |key,table_name|
-    con = settings.man.connection( key )
+    con = settings.man.connection_for( key )
     erb :table, locals: { table: con.table( table_name ) }
   end
 
   get '/db/:key' do |key|
-    con = settings.man.connection( key )
-    erb :db, locals: { key: key, tables: con.tables }
+    con = settings.man.connection_for( key )
+    erb :db, locals: { key: key, tables: con.tables, con: con }
   end
 
   get '/d*' do

@@ -7,13 +7,17 @@ class ConnectionMan  # connection manager
   #    ActiveRecord::Base.configurations.keys
   #  end
 
-  def connection( key='std' )
-    if key == 'std'
-      # -- use/try 'standard/default' connection
-      con = ActiveRecord::Base.connection
-    else
-      con = AbstractModel.connection_for( key )
-    end
+  CONNECTS = {}  # cache connections
+
+  def connection_for( key )
+    # cache connections - needed? why? why not??
+    con = CONNECTS[ key ] ||= AbstractModel.connection_for( key )
+
+    # note: make sure connection is active?
+    #  use verify!  - will try active? followed by reconnect!
+    # - todo: check ourselves if active? - why? why not??
+    con.verify!
+
     # wrap ActiveRecord connection in our own connection class
     Connection.new( con, key )
   end
@@ -22,13 +26,11 @@ class ConnectionMan  # connection manager
   class AbstractModel < ActiveRecord::Base
     self.abstract_class = true   # no table; class just used for getting db connection
 
-    CONNECTS = {}  # cache connections
     def self.connection_for( key )
-      CONNECTS[ key ] ||= begin
-        establish_connection( key )
-        connection
-      end
+      establish_connection( key )
+      connection
     end
+
   end # class AbstractModel
 
 
@@ -42,8 +44,12 @@ class ConnectionMan  # connection manager
     attr_reader  :connection
     attr_reader  :key
 
-    delegate :select_value, :select_all,
+    delegate :select_value, :select_all, :adapter_name,
              :to => :connection
+
+    def class_name
+      @connection.class.name
+    end
 
   #    delegate :quote_table_name, :quote_column_name, :quote,
   #             :update, :insert, :delete,

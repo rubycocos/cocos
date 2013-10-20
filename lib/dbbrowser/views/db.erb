@@ -1,9 +1,13 @@
 
 <h2>## <%= key %> ##</h2>
 
-<pre>
-<%= ActiveRecord::Base.configurations[key].inspect %>
-</pre>
+<h3>Adapter Info</h3>
+<table>
+  <tr><td>adapter name</td><td><%= con.adapter_name %></td></tr>
+  <tr><td>class name</td><td><%= con.class_name %></td></tr>
+</table>
+
+<%= render_spec_for( key ) %>
 
 
 <%= render_tables( tables ) %>
@@ -14,3 +18,5 @@
 
 <%= render_table_def( table ) %>
 <% end %>
+
+<!-- todo: add indexes, check for primary keys - how?? -->
