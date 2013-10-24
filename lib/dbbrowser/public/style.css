@@ -38,6 +38,9 @@
      /* color: #666666; */ /* lighter gray than text gray */
    }
    
+.table-result td {
+  white-space: nowrap;
+}
 
 
 /** version block **********/

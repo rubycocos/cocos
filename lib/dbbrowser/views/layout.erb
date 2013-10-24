@@ -3,14 +3,18 @@
 <head>
   <meta charset='utf-8'>
   <title>DB Browser</title>
+  
   <link href="<%= url('/style.css') %>" rel='stylesheet'>
+  
+  <script src="<%= url('/jquery-2.0.3.min.js') %>"></script>
+  <script src="<%= url('/jquery.tabs.js') %>"></script>
 </head>
 <body>
 
 <p>
   <%= link_to 'DB Browser', root_path(), class: 'nav' %> |
-  <% ActiveRecord::Base.configurations.keys.each do |key| %>
-     <%= link_to key, db_path( key ) %>
+  <% ActiveRecord::Base.configurations.each do |key,hash| %>
+     <%= link_to "#{key}(#{hash[:database]})", db_path( key ) %>
   <% end %>
 </p>
 

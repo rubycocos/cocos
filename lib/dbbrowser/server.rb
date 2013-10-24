@@ -88,8 +88,18 @@ class Server < Sinatra::Base
   end
 
   get '/db/:key/:table_name' do |key,table_name|
-    con = settings.man.connection_for( key )
-    erb :table, locals: { table: con.table( table_name ) }
+    con   = settings.man.connection_for( key )
+    table  = con.table( table_name )
+
+    query_opts = {}
+    query_opts[:limit]  = params[:limit]  if params[:limit].present?
+    query_opts[:offset] = params[:offset] if params[:offset].present?
+    query_opts[:limit]  = params[:l]  if params[:l].present?   # allow l shortcut for limit
+    query_opts[:offset] = params[:o] if params[:o].present?    # allow o shortcut for offset
+    ## todo: add params[:page] ??? will use default limit and calculate offset e.g limit*page=offset - why? why not??
+
+    result = table.query( query_opts )
+    erb :table, locals: { result: result, table: table, tables: con.tables }
   end
 
   get '/db/:key' do |key|

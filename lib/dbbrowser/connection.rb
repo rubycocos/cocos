@@ -109,9 +109,14 @@ class ConnectionMan  # connection manager
 
 
     def fetch_table_select_all( name, opts={} )
-      per_page = (opts[:perpage] || 33).to_i   # 33 records per page (for now default)
+      limit =  (opts[:limit] || 33).to_i # 33 records limit/per page (for now default)
+      limit =  33   if limit == 0   # use default page size if limit 0 (from not a number para)
+      
+      offset = (opts[:offset] || 0).to_i
 
-      sql = "select * from #{name} limit #{per_page}"
+      sql = "select * from #{name} limit #{limit}"
+
+      sql << " offset #{offset}"   if offset > 0     # add offset if present (e.g greater zero)
 
       # page = (opts[:page] || 1 ).try(:to_i)
       # fields = opts[:fields] || nil
@@ -127,6 +132,7 @@ class ConnectionMan  # connection manager
       # end
 
       result = {}
+      result[ :sql  ] = sql    # note: lets also always add sql query to result too
       result[ :rows ] = select_all( sql )
 
       #    unless rez[:rows].blank?
@@ -245,6 +251,8 @@ class ConnectionMan  # connection manager
 
   class Result
     def initialize( opts={} )
+      @sql = opts[:sql]  # sql statement as a string
+
       if opts[:error]
         @error = opts[:error]
       else
@@ -255,7 +263,7 @@ class ConnectionMan  # connection manager
       end
     end
 
-    attr_reader :rows, :error   ### to be done :count, :pages, :fields, 
+    attr_reader :sql, :rows, :error   ### to be done :count, :pages, :fields, 
 
     def error?()  @error.present?;       end
     def rows?()   @rows != nil;          end

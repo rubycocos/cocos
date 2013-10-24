@@ -1,19 +1,40 @@
 
+
+<!-- for easy nav add all tables -->
+<div>
+<% tables.each do |table| %>
+  <%= link_to table.name, table_path( table ) %>
+  <span class='count'>(<%= table.count %>)</span>
+<% end %>
+</div>
+
+
+
 <h2><%= table.name %>
     <span class='count'>(<%= table.count %>)</span>
 </h2>
 
 
+<div id='table-tabs'>
+
+<ul>
+  <li>Columns</li>
+  <li>Data</li>
+</ul>
+
+<div>
 <%= render_table_def( table ) %>
+</div>
 
 
-<% result = table.query() %>
+<div>
+  <p><%= result.sql %></p>
 <% if result.error? %>
     <p>
         ERROR: <%= result.error %>
     </p>
 <% else %>
-  <table>
+  <table class='table-result'>
   <% result.rows.each do |row| %>
     <tr>
       <% row.each do |key,value| %>
@@ -26,7 +47,9 @@
 
             <span title='<%= key %> : <%= value.class.name %>'>
            <% if value.nil? %>
-             NULL <!-- fix/todo: use special char for null?? -->
+              <!-- &oslash; -->
+                &diams;
+              <!-- note: use special char for NULL -->
            <% else %>
                <% if value.kind_of?( String ) %>
                    <%= h( value[0..80] ) %>   <!-- cut off after 80 chars; escape html use h-helper -->
@@ -41,3 +64,9 @@
   <% end %>
   </table>
 <% end %>
+</div>
+</div><!-- table-tabs -->
+
+<script>
+  tabify( '#table-tabs' ).select(1);
+</script>
