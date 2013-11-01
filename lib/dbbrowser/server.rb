@@ -10,7 +10,7 @@ module DbBrowser
 class Server < Sinatra::Base
 
   def self.banner
-    "dbbrowser #{VERSION} on Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}] on Sinatra/#{Sinatra::VERSION} (#{ENV['RACK_ENV']})"
+    "dbbrowser/#{VERSION} on Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}] on Sinatra/#{Sinatra::VERSION} (#{ENV['RACK_ENV']})"
   end
 
   PUBLIC_FOLDER = "#{DbBrowser.root}/lib/dbbrowser/public"
@@ -82,6 +82,21 @@ class Server < Sinatra::Base
 
   ##############################################
   # Controllers / Routing / Request Handlers
+
+
+  ### auto-add DATABASE_URL if ar configuration is empty hash ({})
+  before do
+    if ActiveRecord::Base.configurations.nil?   # -- needed? can this ever happen?
+      puts "ActiveRecord configurations nil - set to empty hash"
+      ActiveRecord::Base.configurations = {} # make it an empty hash
+    end
+
+    if ActiveRecord::Base.configurations.empty?
+      puts "ActiveRecord configurations empty? - check for DATABASE_URL in env"   
+      DbBrowser.add_database_url 
+    end
+  end
+
 
   get '/' do
     erb :index

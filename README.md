@@ -9,7 +9,31 @@ database browser (connections, schema, tables, records, etc.) as mountable web a
 
 ## Usage
 
-TBD
+### Rack
+
+In your rack configuration (`config.ru`) mount the databrowser app; add the line:
+
+~~~
+map '/browse' { run DbBrowser::Server  }
+~~~
+
+
+### Rails
+
+In your routes (`config/routes.rb`) mount the databrowser app; add the line:
+
+~~~
+mount DbBrowser::Server, :at => '/browse'
+~~~
+
+
+## Real World Usage
+
+The pluto live feed reader site uses the database browser; see [`pluto.live/config.ru`](https://github.com/feedreader/pluto.live/blob/master/config.ru)
+
+The sport.db.admin site uses the database browser; see [`sport.db.admin/config/routes.rb`](https://github.com/geraldb/sport.db.admin/blob/master/config/routes.rb)
+
+
 
 ## Alternatives
 
