@@ -18,7 +18,10 @@ Hoe.spec 'dbbrowser' do
   self.history_file = 'History.md'
 
   self.extra_deps = [
-    ['logutils', '>= 0.5']
+    ## ['logutils', '>= 0.5'],  # already part of textutils - remove ???
+    ['textutils'],
+    ['activerecord'],
+    ['sinatra']
   ]
 
   self.licenses = ['Public Domain']
