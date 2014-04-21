@@ -14,7 +14,7 @@ database browser (connections, schema, tables, records, etc.) as mountable web a
 In your rack configuration (`config.ru`) mount the databrowser app; add the line:
 
 ~~~
-map '/browse' { run DbBrowser::Server  }
+map('/browse') { run DbBrowser::Server  }
 ~~~
 
 
