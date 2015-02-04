@@ -21,14 +21,14 @@ Hoe.spec 'dbbrowser' do
     ## ['logutils', '>= 0.5'],  # already part of textutils - remove ???
     ['textutils'],
     ['activerecord'],
+    ['activerecord-utils', '>= 0.4.0'],
     ['sinatra']
   ]
 
   self.licenses = ['Public Domain']
 
   self.spec_extras = {
-   :required_ruby_version => '>= 1.9.2'
+   required_ruby_version: '>= 1.9.2'
   }
-
 
 end

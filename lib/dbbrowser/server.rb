@@ -1,3 +1,4 @@
+# encoding: utf-8
 
 
 # 3rd party libs/gems
@@ -25,7 +26,7 @@ class Server < Sinatra::Base
   set :static, true # set up static file routing
 
 
-  set :man, ConnectionMan.new
+  set :browser, ActiveRecordUtils::Browser.new
 
   #################
   # Helpers
@@ -73,7 +74,7 @@ class Server < Sinatra::Base
   end
 
   def render_tables_for( key, opts={} )
-    con = settings.man.connection_for( key )
+    con = settings.browser.connection_for( key )
     erb( 'shared/_tables'.to_sym,
          layout: false,
          locals: { tables: con.tables } )
@@ -103,7 +104,7 @@ class Server < Sinatra::Base
   end
 
   get '/db/:key/:table_name' do |key,table_name|
-    con   = settings.man.connection_for( key )
+    con   = settings.browser.connection_for( key )
     table  = con.table( table_name )
 
     query_opts = {}
@@ -118,7 +119,7 @@ class Server < Sinatra::Base
   end
 
   get '/db/:key' do |key|
-    con = settings.man.connection_for( key )
+    con = settings.browser.connection_for( key )
     erb :db, locals: { key: key, tables: con.tables, con: con }
   end
 

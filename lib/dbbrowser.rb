@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 
 require 'pp'
 
@@ -7,18 +9,15 @@ require 'pp'
 require 'textutils'
 
 require 'active_record'
+require 'activerecord/utils'    ## pull in browser support
 
 
 # our own code
 
 require 'dbbrowser/version'  # let it always go first
-require 'dbbrowser/connection'
+
 
 module DbBrowser
-
-  def self.root
-    "#{File.expand_path( File.dirname(File.dirname(__FILE__)) )}"
-  end
 
 
   ### helper for DATABASE_URL for ActiveRecord
