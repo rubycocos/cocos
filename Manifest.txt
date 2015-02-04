@@ -3,7 +3,6 @@ Manifest.txt
 README.md
 Rakefile
 lib/dbbrowser.rb
-lib/dbbrowser/connection.rb
 lib/dbbrowser/public/jquery-2.0.3.min.js
 lib/dbbrowser/public/jquery.tabs.js
 lib/dbbrowser/public/style.css
