@@ -1,0 +1,28 @@
+require 'hoe'
+require './lib/monofile/version.rb'
+
+
+Hoe.spec 'monofile' do
+
+  self.version = Mono::Module::Monofile::VERSION
+
+  self.summary = "monofile - read in / parse monorepo / mono source tree definitions - a list of git (and github) projects, and more"
+  self.description = summary
+
+  self.urls = { home: 'https://github.com/rubycoco/git' }
+
+  self.author = 'Gerald Bauer'
+  self.email = 'opensport@googlegroups.com'
+
+  # switch extension to .markdown for gihub formatting
+  self.readme_file  = 'README.md'
+  self.history_file = 'CHANGELOG.md'
+
+  self.licenses = ['Public Domain']
+
+  self.extra_deps = []
+
+  self.spec_extras = {
+    required_ruby_version: '>= 2.2.2'
+  }
+end
