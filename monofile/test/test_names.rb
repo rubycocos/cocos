@@ -10,85 +10,86 @@ class TestNames < MiniTest::Test
 
 def test_parse
   %w[
-    @yorobot/stage
-    stage@yorobot
+    @openfootball/england
+    england@openfootball
   ].each do |line|
     mono = Mononame.parse( line )
 
-    assert_equal '@yorobot/stage', mono.to_s
-    assert_equal 'yorobot/stage',  mono.to_path
+    assert_equal '@openfootball/england', mono.to_s
+    assert_equal 'openfootball/england',  mono.to_path
 
-    assert_equal 'yorobot',            mono.org
-    assert_equal 'stage',              mono.name
+    assert_equal 'openfootball',          mono.org
+    assert_equal 'england',               mono.name
   end
 
 
   %w[
-    @yorobot/stage/one
-    one@yorobot/stage
-    stage/one@yorobot
+    @openfootball/england/2020-21
+    2020-21@openfootball/england
+    england/2020-21@openfootball
   ].each do |line|
     mono = Monopath.parse( line )
 
-    assert_equal '@yorobot/stage/one', mono.to_s
-    assert_equal 'yorobot/stage/one',  mono.to_path
+    assert_equal '@openfootball/england/2020-21', mono.to_s
+    assert_equal 'openfootball/england/2020-21',  mono.to_path
 
-    assert_equal 'yorobot',            mono.org
-    assert_equal 'stage',              mono.name
-    assert_equal 'one',                mono.path
+    assert_equal 'openfootball',            mono.org
+    assert_equal 'england',                 mono.name
+    assert_equal '2020-21',                 mono.path
   end
 
   %w[
-    @yorobot/stage/one/hello.txt
-    hello.txt@yorobot/stage/one
-    stage/one/hello.txt@yorobot
+    @openfootball/england/2020-21/premierleague.txt
+    2020-21/premierleague.txt@openfootball/england
+    england/2020-21/premierleague.txt@openfootball
   ].each do |line|
     mono = Monopath.parse( line )
 
-    assert_equal '@yorobot/stage/one/hello.txt', mono.to_s
-    assert_equal 'yorobot/stage/one/hello.txt',  mono.to_path
+    assert_equal '@openfootball/england/2020-21/premierleague.txt', mono.to_s
+    assert_equal 'openfootball/england/2020-21/premierleague.txt',  mono.to_path
 
-    assert_equal 'yorobot',            mono.org
-    assert_equal 'stage',              mono.name
-    assert_equal 'one/hello.txt',      mono.path
+    assert_equal 'openfootball',              mono.org
+    assert_equal 'england',                   mono.name
+    assert_equal '2020-21/premierleague.txt', mono.path
   end
 end   # method test_parse
 
 
+
 def test_init
-  mono = Mononame.new( 'yorobot','stage' )
+  mono = Mononame.new( 'openfootball','england' )
 
-  assert_equal '@yorobot/stage', mono.to_s
-  assert_equal 'yorobot/stage',  mono.to_path
+  assert_equal '@openfootball/england', mono.to_s
+  assert_equal 'openfootball/england',  mono.to_path
 
-  assert_equal 'yorobot',            mono.org
-  assert_equal 'stage',              mono.name
+  assert_equal 'openfootball',            mono.org
+  assert_equal 'england',              mono.name
 
 
-  mono = Monopath.new( 'yorobot', 'stage', 'one' )
+  mono = Monopath.new( 'openfootball', 'england', '2020-21' )
 
-  assert_equal '@yorobot/stage/one', mono.to_s
-  assert_equal 'yorobot/stage/one',  mono.to_path
+  assert_equal '@openfootball/england/2020-21', mono.to_s
+  assert_equal 'openfootball/england/2020-21',  mono.to_path
 
-  assert_equal 'yorobot',            mono.org
-  assert_equal 'stage',              mono.name
-  assert_equal 'one',                mono.path
+  assert_equal 'openfootball',            mono.org
+  assert_equal 'england',                 mono.name
+  assert_equal '2020-21',                 mono.path
 
 
   ## !!!!todo/check/fix!!!!!:
-  ##   - support 'one', 'hello.txt' too (or only) - why? why not?
+  ##   - support '2020-21', 'premierleague.txt' too (or only) - why? why not?
   ##
   ##  todo/check/fix:
   ##    find a better name for path/path? component / part - why? why not?
   ##      to_path and path/path? to confusing!!!
-  mono = Monopath.new( 'yorobot', 'stage', 'one/hello.txt' )
+  mono = Monopath.new( 'openfootball', 'england', '2020-21/premierleague.txt' )
 
-  assert_equal '@yorobot/stage/one/hello.txt', mono.to_s
-  assert_equal 'yorobot/stage/one/hello.txt',  mono.to_path
+  assert_equal '@openfootball/england/2020-21/premierleague.txt', mono.to_s
+  assert_equal 'openfootball/england/2020-21/premierleague.txt',  mono.to_path
 
-  assert_equal 'yorobot',            mono.org
-  assert_equal 'stage',              mono.name
-  assert_equal 'one/hello.txt',      mono.path
+  assert_equal 'openfootball',              mono.org
+  assert_equal 'england',                   mono.name
+  assert_equal '2020-21/premierleague.txt', mono.path
 end   # method test_init
 
 

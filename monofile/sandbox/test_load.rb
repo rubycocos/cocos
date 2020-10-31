@@ -5,12 +5,12 @@ require 'monofile'
 monofile = Monofile.load( <<TXT )
 
 ### some comments
-project "@yorobt/backup"
-project "@yorobt/football.json"
+project "@openfootball/england"
+project "@openfootball/world-cup"
 project "@geraldb/austria"
 
 project "geraldb", "catalog"
-
+project "openfootball", "south-america"
 
 puts "hello from monofile"
 TXT

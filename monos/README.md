@@ -1,8 +1,8 @@
 # monos - monorepo / mono source tree tools and (startup) scripts
 
 
-* home  :: [github.com/rubycoco/git](https://github.com/rubycoco/git)
-* bugs  :: [github.com/rubycoco/git/issues](https://github.com/rubycoco/git/issues)
+* home  :: [github.com/rubycoco/monos](https://github.com/rubycoco/monos)
+* bugs  :: [github.com/rubycoco/monos/issues](https://github.com/rubycoco/monos/issues)
 * gem   :: [rubygems.org/gems/monos](https://rubygems.org/gems/monos)
 * rdoc  :: [rubydoc.info/gems/monos](http://rubydoc.info/gems/monos)
 * forum :: [opensport](http://groups.google.com/group/opensport)

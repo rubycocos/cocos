@@ -9,7 +9,7 @@ Hoe.spec 'monofile' do
   self.summary = "monofile - read in / parse monorepo / mono source tree definitions - a list of git (and github) projects, and more"
   self.description = summary
 
-  self.urls = { home: 'https://github.com/rubycoco/git' }
+  self.urls = { home: 'https://github.com/rubycoco/monos' }
 
   self.author = 'Gerald Bauer'
   self.email = 'opensport@googlegroups.com'

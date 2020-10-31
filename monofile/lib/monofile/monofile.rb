@@ -198,12 +198,11 @@ class Monofile
   ## - austria
   ## - catalog
   ## - geraldb.github.io
-  ## - logos
-  ## yorobot:
-  ## - auto
-  ## - backup
-  ## - football.json
-  ## - logs
+  ## openfootball:
+  ## - england
+  ## - europe
+  ## - south-america
+  ## - world-cup
   ##
   def to_h
     h = {}

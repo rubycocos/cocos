@@ -1,11 +1,11 @@
 #####
 #  mononame (e.g. @org/hello) machinery
 #  turn
-#  - @yorobot/stage/one
-#  - one@yorobot/stage
-#  - stage/one@yorobot
+#  - @openfootball/england/2020-21
+#  - 2020-21@openfootball/england
+#  - england/2020-21@openfootball
 #      => into
-#  - yorobot/stage/one
+#  - openfootball/england/2020-21
 
 
 
