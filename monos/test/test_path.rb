@@ -12,10 +12,10 @@ def test_real_path
     '@yorobot/stage/one',
     'one@yorobot/stage',
     'stage/one@yorobot',
-  ].each do |name|
-     puts "#{name} => >#{MonoFile.norm_name( name )}<"
+  ].each do |path|
+     puts "#{path} => >#{Monopath.parse( path )}<"
 
-     assert_equal "#{Mono.root}/yorobot/stage/one", Mono.real_path( name )
+     assert_equal "#{Mono.root}/yorobot/stage/one", Monopath.real_path( path )
   end
 end
 

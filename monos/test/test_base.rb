@@ -9,9 +9,9 @@ class TestBase < MiniTest::Test
   Git = Mono::Git
 
   def test_version
-    puts MonoCore::VERSION
-    puts MonoCore.banner
-    puts MonoCore.root
+    puts Mono::Module::Tool::VERSION
+    puts Mono::Module::Tool.banner
+    puts Mono::Module::Tool.root
 
     puts Mono::VERSION
   end

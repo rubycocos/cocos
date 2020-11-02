@@ -51,14 +51,11 @@ class Mononame
     new( *values )
   end
 
-
   def self.real_path( line )
     ## add one-time (quick) usage convenience shortcut
-    name = parse( line )
-    name.real_path
+    mononame = parse( line )
+    mononame.real_path
   end
-
-  ## todo/fix: add real_path
 
 
   ## note: org and name for now required
@@ -76,8 +73,10 @@ class Mononame
     end
   end
 
-  def to_path() "#{@org}/#{@name}"; end
-  def to_s()    "@#{to_path}"; end
+  def to_path()   "#{@org}/#{@name}"; end
+  def to_s()      "@#{to_path}"; end
+
+  def real_path() "#{Mono.root}/#{to_path}"; end
 end # class Mononame
 
 
@@ -103,6 +102,12 @@ class Monopath
     new( *values )
   end
 
+  def self.real_path( line )
+    monopath = parse( line )
+    monopath.real_path
+  end
+
+
   ## note: org and name AND path for now required
   ##   - make name path optional too - why? why not?!!!
   attr_reader :org, :name, :path
@@ -124,8 +129,39 @@ class Monopath
     end
   end
 
-  def to_path() "#{@org}/#{@name}/#{@path}"; end
-  def to_s()    "@#{to_path}"; end
+  def to_path()   "#{@org}/#{@name}/#{@path}"; end
+  def to_s()      "@#{to_path}"; end
+
+  def real_path() "#{Mono.root}/#{to_path}"; end
+
+
+  ## some File-like convenience helpers
+  ##   e.g. File.exist?   => Monopath.exist?
+  ##        File.open     => Monopath.open( ... ) { block }
+  ##   etc.
+  def self.exist?( line )
+     File.exist?( real_path( line ) )
+  end
+
+
+  ## path always relative to Mono.root
+  ##   todo/fix:  use File.expand_path( path, Mono.root ) - why? why not?
+  ##    or always enfore "absolut" path e.g. do NOT allow ../ or ./ or such
+  def self.open( line, mode='r:utf-8', &block )
+    path = real_path( line )
+    ## make sure path exists if we open for writing/appending - why? why not?
+    if mode[0] == 'w' || mode[0] == 'a'
+      FileUtils.mkdir_p( File.dirname( path ) )  ## make sure path exists
+    end
+
+    File.open( path, mode ) do |file|
+      block.call( file )
+    end
+  end
+
+  def self.read_utf8( line )
+    open( line, 'r:utf-8') { |file| file.read }
+  end
 end  # class Monopath
 ## note: use Monopath   - avoid confusion with Monofile (a special file with a list of mono projects)!!!!
 

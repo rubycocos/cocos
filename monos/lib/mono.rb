@@ -1,3 +1,6 @@
+require 'monofile'
+
+
 ## first add git support
 ##   note: use the "modular" version WITHOUT auto-include gitti,
 ##          thus, require 'gitti/base' (and NOT 'gitti')
@@ -10,9 +13,6 @@ module Mono
   include Gitti
 end
 
-
-## some more stdlibs
-# require 'optparse'
 
 
 
@@ -29,6 +29,22 @@ require 'mono/commands/env'
 require 'mono/commands/backup'
 require 'mono/commands/run'
 require 'mono/tool'
+
+
+
+module Mono
+def self.monofile
+  path = Monofile.find
+
+  if path
+    Monofile.read( path )
+  else
+    puts "!! WARN: no mono configuration file found; looking for #{Monofile::NAMES.join(', ')} in (#{Dir.getwd})"
+    Monofile.new   ## return empty set -todo/check: return nil - why? why not?
+  end
+end
+end  ## module Mono
+
 
 
 puts Mono::Module::Tool.banner   # say hello

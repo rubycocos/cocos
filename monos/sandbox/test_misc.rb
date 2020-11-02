@@ -5,15 +5,15 @@ puts
 puts Mono.root
 
 
-puts MonoFile.real_path( 'hello.txt@tmp/test' )
+puts Monopath.real_path( 'hello.txt@tmp/test' )
 
 
-puts MonoFile.read_utf8( 'hello.txt@tmp/test' )
-pp MonoFile.exist?( 'hello.txt@tmp/test' )
-pp MonoFile.exist?( 'hola.txt@tmp/test' )
+puts Monopath.read_utf8( 'hello.txt@tmp/test' )
+pp Monopath.exist?( 'hello.txt@tmp/test' )
+pp Monopath.exist?( 'hola.txt@tmp/test' )
 
 
-MonoFile.open( 'test.txt@tmp/test', 'w:utf-8' ) do |f|
+Monopath.open( 'test.txt@tmp/test', 'w:utf-8' ) do |f|
   f.write( "test test test\n" )
   f.write( "#{Time.now}\n")
 end

@@ -48,21 +48,8 @@ module Mono
     ## use expand path to make (assure) absolute path - why? why not?
     @@root = File.expand_path( path )
   end
-
-
-
-  def self.monofile
-    path = Monofile.find
-    Monofile.read( path )
-
-#    if path
-#      GitRepoSet.read( path )
-#    else
-#      puts "!! WARN: no mono configuration file found; looking for #{MONOFILES.join(', ')} in (#{Dir.getwd})"
-#      GitRepoSet.new( {} )  ## return empty set -todo/check: return nil - why? why not?
-#    end
-  end
 end  ## module Mono
+
 
 
 

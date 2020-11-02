@@ -20,8 +20,9 @@ Hoe.spec 'monos' do
   self.licenses = ['Public Domain']
 
   self.extra_deps = [
-    ['gitti',         '>= 0.6.1' ],
-    ['gitti-backup',  '>= 0.4.1' ],
+    ['monofile',      '>= 0.2.2'],
+    ['gitti',         '>= 0.6.1'],
+    ['gitti-backup',  '>= 0.4.1'],
   ]
 
   self.spec_extras = {

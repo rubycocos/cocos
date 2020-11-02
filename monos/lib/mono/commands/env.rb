@@ -2,7 +2,7 @@ module Mono
 
   def self.env   ## check environment setup
     puts "Mono.root (MOPATH): >#{Mono.root}<"
-    puts "MonoCore.root:  >#{MonoCore.root}<"
+    puts "Mono::Module::Tool.root:  >#{Mono::Module::Tool.root}<"
     puts
 
     ## add ruby version and path - why? why not? e.g.
@@ -19,7 +19,7 @@ module Mono
     Git.config( /user/, show_origin: true )
 
     puts
-    puts "monorepo.yml:"
+    puts "monofile => (#{Monofile.find}):"
     pp   Mono.monofile
   end
 
