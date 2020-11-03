@@ -10,7 +10,15 @@ project "@openfootball/world-cup"
 project "@geraldb/austria"
 
 project "geraldb", "catalog"
-project "openfootball", "south-america"
+project :openfootball, :"south-america"
+
+puts "class: " + self.class.name   #=> Monofile::Builder
+## try "batch" adding projects
+projects( {},
+          { 'footballcsv':
+             ['england', 'world'] }
+        )
+
 
 puts "hello from monofile"
 TXT

@@ -5,13 +5,13 @@ class Monofile
   ## nested class
   class Project    ## todo/fix: change to Monoproject/MonoProject - why? why not?
     def initialize( *args )
-      if args.size == 2 && args[0].is_a?(String) && args[1].is_a?(String)
+      if args.size == 1 && args[0].is_a?( String )
+        @name = Mononame.parse( args[0] )
+      elsif args.size == 2 && args[0].is_a?(String) && args[1].is_a?(String)
         ## assume [org, name]
         @name = Mononame.new( *args )
-      elsif args.size == 1 && args[0].is_a?( String )
-        @name = Mononame.parse( args[0] )
       else
-        raise ArgumentError, "[MonoProject] one or two string args expected; got: #{args.pretty_inspect}"
+        raise ArgumentError, "[MonoProject] one or two string args expected; got: #{args.inspect}"
       end
     end
 
@@ -32,10 +32,36 @@ class Monofile
     end
 
     def project( *args )
+      ## auto-convert symbols to string
+      args = args.map do |arg|
+                        arg.is_a?( Symbol ) ? arg.to_s : arg
+                      end
+
       project = Project.new( *args )
       @monofile.projects << project
     end
+
+    ###
+    ## adding many projects at once (by batch) - keep - why? why not?
+    def projects( *args )
+      ## note: for now only support (list of) hash
+      ##  add more later (nested array or text or such) - why? why not?
+      args.each do |arg|
+        raise ArgumentError, "expected Hash type - got: #{arg.inspect} : #{arg.class.name}"  unless arg.is_a?( Hash )
+      end
+
+      ## pp arg
+      args.each do |arg|
+        arg.each do |org, names|
+          names.each do |name|
+            ## puts "adding #{org} #{name}"
+            project( org, name )
+          end
+        end
+      end
+    end
   end  # (nested) class Builder
+
 
 
 
