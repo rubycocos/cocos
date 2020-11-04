@@ -56,6 +56,9 @@ class Mononame
     mononame = parse( line )
     mononame.real_path
   end
+  class << self
+    alias_method :realpath, :real_path
+  end
 
 
   ## note: org and name for now required
@@ -77,6 +80,12 @@ class Mononame
   def to_s()      "@#{to_path}"; end
 
   def real_path() "#{Mono.root}/#{to_path}"; end
+  alias_method :realpath, :real_path
+
+  ## todo/check: also check for /.git subfolder - why? why not?
+  def exist?() Dir.exist?( real_path ); end
+
+
 end # class Mononame
 
 
@@ -106,6 +115,9 @@ class Monopath
     monopath = parse( line )
     monopath.real_path
   end
+  class << self
+    alias_method :realpath, :real_path
+  end
 
 
   ## note: org and name AND path for now required
@@ -133,7 +145,7 @@ class Monopath
   def to_s()      "@#{to_path}"; end
 
   def real_path() "#{Mono.root}/#{to_path}"; end
-
+  alias_method :realpath, :real_path
 
   ## some File-like convenience helpers
   ##   e.g. File.exist?   => Monopath.exist?

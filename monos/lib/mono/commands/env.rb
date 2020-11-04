@@ -1,5 +1,6 @@
 module Mono
 
+class Tool
   def self.env   ## check environment setup
     puts "Mono.root (MOPATH): >#{Mono.root}<"
     puts "Mono::Module::Tool.root:  >#{Mono::Module::Tool.root}<"
@@ -22,5 +23,5 @@ module Mono
     puts "monofile => (#{Monofile.find}):"
     pp   Mono.monofile
   end
-
+end # class Tool
 end # module Mono

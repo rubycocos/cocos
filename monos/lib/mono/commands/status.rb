@@ -1,6 +1,7 @@
 module Mono
 
-  ## pass along hash of repos (e.g. monorepo.yml or repos.yml )
+## pass along hash of repos (e.g. monorepo.yml or repos.yml )
+class Tool
   def self.status
     repos = Mono.monofile
 
@@ -61,5 +62,5 @@ module Mono
     end
 
   end # method status
-
+end  # class Tool
 end  # module Mono

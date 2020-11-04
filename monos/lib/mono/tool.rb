@@ -44,20 +44,21 @@ class Tool
    ## note: allow shortcut for commands
    case cmd.downcase
    when 'status', 'stati', 'stat', 'st', 's'
-      Mono.status
+      status
    when 'sync', 'syn', 'sy',  ## note: allow aliases such as install, get & up too
         'get', 'g',
         'install', 'insta', 'inst', 'ins', 'i',
         'up', 'u'
-      Mono.sync
+      sync
    when 'fetch', 'f'
-      Mono.fetch
+      fetch
    when 'env', 'e'
-      Mono.env
+      env
    when 'backup', 'back', 'b'
-      Mono.backup
+      backup
    when 'run', 'r', 'exec'
-      Mono.run( args )
+      run( args )
+
 
    ##################
    ## for debugging / linting

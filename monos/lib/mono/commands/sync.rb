@@ -1,6 +1,7 @@
 module Mono
 
-  ## pass along hash of repos (e.g. monorepo.yml or repos.yml )
+## pass along hash of repos (e.g. monorepo.yml or repos.yml )
+class Tool
   def self.sync
     repos = Mono.monofile
 
@@ -50,4 +51,5 @@ module Mono
     puts "#{count_repos} repo(s) @ #{count_orgs} org(s)"
   end # method sync
 
+end  # class Tool
 end  # module Mono

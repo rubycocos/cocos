@@ -1,5 +1,6 @@
 module Mono
   ## pass along hash of repos (e.g. monorepo.yml or repos.yml )
+class Tool
   def self.fetch
     repos = Mono.monofile
 
@@ -39,5 +40,5 @@ module Mono
     print "#{count_repos} repo(s) @ #{count_orgs} org(s)"
     print "\n"
   end # method fetch
-
+end  # class Tool
 end  # module Mono

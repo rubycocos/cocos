@@ -1,6 +1,7 @@
 module Mono
 
-  ## pass along hash of repos (e.g. monorepo.yml or repos.yml )
+## pass along hash of repos (e.g. monorepo.yml or repos.yml )
+class Tool
   def self.backup
     repos = Mono.monofile
 
@@ -11,5 +12,5 @@ module Mono
     ##   2) git remote update  (if local backup already exists)
     backup.backup( repos )
   end # method backup
-
+end  # class Tool
 end  # module Mono

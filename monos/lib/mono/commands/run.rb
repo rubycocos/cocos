@@ -1,5 +1,6 @@
 module Mono
 
+class Tool
   def self.run( *args )
     ## todo/fix: use a "standard" argument to pass along hash of repos
     ##   (e.g. monorepo.yml or repos.yml ) how?  - why? why not?
@@ -43,5 +44,5 @@ module Mono
     print "#{count_repos} repo(s) @ #{count_orgs} org(s)"
     print "\n"
   end # method run
-
+end  # class Tool
 end  # module Mono

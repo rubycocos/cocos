@@ -11,6 +11,12 @@ require 'gitti/backup/base'
 module Mono
   ## note: make Git, GitProject, GitRepoSet, etc. available without Gitti::
   include Gitti
+
+  class Tool
+    include Gitti
+  end
+
+  ## add more classes e.g. MonoGitProject, etc. - why? why not?
 end
 
 

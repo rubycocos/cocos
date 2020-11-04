@@ -1,9 +1,6 @@
 #####################
 #  add repo helper
 
-##
-## todo/fix:  ALWAYS assert name format
-##   (rename to mononame and monopath) - why? why not?
 
 class MonoGitHub
   def self.clone( name, depth: nil )
@@ -11,7 +8,9 @@ class MonoGitHub
     ##   @rubycoco/gitti  or
     ##   gitti@rubycoco
     ##  =>  rubycoco/gitti
-    mononame  = Mononame.parse( name )
+
+    ## note: allow passing in (reusing) of mononames too
+    mononame =  name.is_a?( Mononame ) ? name : Mononame.parse( name )
     path      = mononame.real_path
 
     org_path = File.dirname( path )
@@ -32,11 +31,13 @@ MonoGithub = MonoGitHub  ## add convenience (typo?) alias
 
 class MonoGitProject
   def self.open( name, &block )
-    mononame = Mononame.parse( name )
+    ## note: allow passing in (reusing) of mononames too
+    mononame = name.is_a?( Mononame ) ? name : Mononame.parse( name )
     path     = mononame.real_path
     Gitti::GitProject.open( path, &block )
   end
 end
+
 
 
 
@@ -45,6 +46,30 @@ module Mono
   ## add some short cuts
   def self.open( name, &block )      MonoGitProject.open( name, &block ); end
   def self.clone( name, depth: nil ) MonoGitHub.clone( name, depth: depth ); end
+
+  ######################################
+  ## add some more "porcelain" helpers
+  def self.sync( name )
+     ## add some options - why? why not?
+     ##  -  :readonly    - auto-adds  depth: 1 on clone or such - why? why not?
+     ##  -  :clone  true/false  - do NOT clone only fast forward or such - why? why not?
+     ##  -  :clean  true/false or similar  - only clone repos; no fast forward
+     ##  others - ideas -- ??
+
+     ## note: allow passing in (reusing) of mononames too
+     mononame =  name.is_a?( Mononame ) ? name : Mononame.parse( name )
+     if mononame.exist?
+       MonoGitProject.open( mononame ) do |proj|
+         if proj.changes?
+           puts "!! WARN - local changes in workdir; skipping fast forward (remote) sync / merge"
+         else
+           proj.fast_forward   ## note: use git pull --ff-only (fast forward only - do NOT merge)
+         end
+       end
+     else
+       MonoGitHub.clone( mononame )
+     end
+  end # method self.sync
 end  ## module Mono
 
 

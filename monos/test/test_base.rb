@@ -21,7 +21,7 @@ class TestBase < MiniTest::Test
   end
 
   def test_env
-    puts Mono.env
+    puts Mono::Tool.env
   end
 
 
