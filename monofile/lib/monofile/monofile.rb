@@ -15,7 +15,9 @@ class Monofile
       end
     end
 
-    def org()     @name.org; end
+    def scope()   @name.scope; end
+    alias_method  :org, :scope
+
     def name()    @name.name; end
 
     def to_path() @name.to_path; end

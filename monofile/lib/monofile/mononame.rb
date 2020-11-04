@@ -21,13 +21,13 @@ module Mono
 
       ## pass 1) rebuild (normalized) name/path
       name = String.new('')
-      name << parts[1]  ## add orgs path first - w/o leading @ - gets removed by split :-)
+      name << parts[1]  ## add orgs/scopes path first - w/o leading @ - gets removed by split :-)
       if parts[0].length > 0   ## has leading repo name (w/ optional path)
         name << '/'
         name << parts[0]
       end
 
-      ## pass 2) split (normalized) name/path into components (org/name/path)
+      ## pass 2) split (normalized) name/path into components (scope/name/path)
       parts = name.split( '/' )
 
       args = [parts[0], parts[1]]
@@ -47,7 +47,7 @@ end  # module Mono
 class Mononame
   def self.parse( line )
     values = Mono.parse_name( line )
-    raise ArgumentError, "[Mononame] expected two parts (org/name); got #{values.pretty_inspect}"   if values.size != 2
+    raise ArgumentError, "[Mononame] expected two parts (scope/name); got #{values.pretty_inspect}"   if values.size != 2
     new( *values )
   end
 
@@ -61,22 +61,28 @@ class Mononame
   end
 
 
-  ## note: org and name for now required
+  ## note: org/scope and name for now required
   ##   - make name optional too - why? why not?!!!
   ## use some different names / attributes ??
-  attr_reader :org,     ## todo/check: find a different name (or add alias e.g. login/user/etc.)
+  attr_reader :scope,     ## todo/check: find a different name (or add alias e.g. login/user/etc.)
               :name
 
-  def initialize( org, name )
-    if org.is_a?(String) && name.is_a?(String)
-      @org  = org
-      @name = name
+  alias_method :org, :scope    ## add user/login too - why? why not?
+  ## e.g.  @openfootball/austria
+  ##      scope => openfootball
+  ##      name  => austria
+
+
+  def initialize( scope, name )
+    if scope.is_a?(String) && name.is_a?(String)
+      @scope = scope
+      @name  = name
     else
-      raise ArgumentError, "[Mononame] expected two strings (org, name); got >#{org}< of type #{org.class.name}, >#{name}< of type #{name.class.name}"
+      raise ArgumentError, "[Mononame] expected two strings (scope, name); got >#{scope}< of type #{scope.class.name}, >#{name}< of type #{name.class.name}"
     end
   end
 
-  def to_path()   "#{@org}/#{@name}"; end
+  def to_path()   "#{@scope}/#{@name}"; end
   def to_s()      "@#{to_path}"; end
 
   def real_path() "#{Mono.root}/#{to_path}"; end
@@ -107,7 +113,7 @@ end # class Mononame
 class Monopath
   def self.parse( line )
     values = Mono.parse_name( line )
-    raise ArgumentError, "[Monopath] expected three parts (org/name/path); got #{values.pretty_inspect}"   if values.size != 3
+    raise ArgumentError, "[Monopath] expected three parts (scope/name/path); got #{values.pretty_inspect}"   if values.size != 3
     new( *values )
   end
 
@@ -120,28 +126,29 @@ class Monopath
   end
 
 
-  ## note: org and name AND path for now required
+  ## note: org/scope and name AND path for now required
   ##   - make name path optional too - why? why not?!!!
-  attr_reader :org, :name, :path
+  attr_reader :scope, :name, :path
+  alias_method :org, :scope   ## add user/login too? why? why not?
 
-  def initialize( org, name, path )
+  def initialize( scope, name, path )
      ## support/check for empty path too - why? why not?
 
-    if org.is_a?(String) && name.is_a?(String) && path.is_a?(String)
-    ## assume [org, name, path?]
+    if scope.is_a?(String) && name.is_a?(String) && path.is_a?(String)
+    ## assume [scope, name, path?]
     ##  note: for now assumes proper formatted strings
-    ##   e.g. no leading @ or combined @hello/text in org
+    ##   e.g. no leading @ or combined @hello/text in scope/org
     ##   or name or such
     ##  - use parse/norm_name here too - why? why not?
-      @org  = org
-      @name = name
-      @path = path
+      @scope  = scope
+      @name   = name
+      @path   = path
     else
-      raise ArgumentError, "[Monopath] expected three strings (org, name, path); got >#{org}< of type #{org.class.name}, >#{name}< of type #{name.class.name}, >#{path}< of type #{path.class.name}"
+      raise ArgumentError, "[Monopath] expected three strings (scope, name, path); got >#{scope}< of type #{scope.class.name}, >#{name}< of type #{name.class.name}, >#{path}< of type #{path.class.name}"
     end
   end
 
-  def to_path()   "#{@org}/#{@name}/#{@path}"; end
+  def to_path()   "#{@scope}/#{@name}/#{@path}"; end
   def to_s()      "@#{to_path}"; end
 
   def real_path() "#{Mono.root}/#{to_path}"; end
