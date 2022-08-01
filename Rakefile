@@ -20,7 +20,11 @@ Hoe.spec 'cocos' do
 
   self.licenses = ['Public Domain']
 
-  self.extra_deps = []
+  self.extra_deps = [
+    ['csvreader',      '>= 1.2.5'],
+    ['tabreader',      '>= 1.0.1'],
+    ['iniparser',      '>= 1.0.1'],
+  ]
 
   self.spec_extras = {
     required_ruby_version: '>= 2.2.2'
