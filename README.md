@@ -1,4 +1,4 @@
-# cocos (code commons) - auto-incude quick-starter prelude & prolog
+# cocos (code commons) - auto-include quick-starter prelude & prolog
 
 
 * home  :: [github.com/rubycocos/cococs](https://github.com/rubycocos/cococs)
