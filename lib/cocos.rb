@@ -32,7 +32,7 @@ require 'cocos/version'   # note: let version always go first
 ##  read/parse convenience/helper shortcuts
 
 
-class Kernel
+module Kernel
 
 
 
@@ -114,7 +114,7 @@ def read_lines( path )
 end
 
 
-end # class Kernel
+end # module Kernel
 
 
 

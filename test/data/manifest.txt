@@ -1,0 +1,7 @@
+CHANGELOG.md
+LICENSE.md
+Manifest.txt
+README.md
+Rakefile
+lib/cocos.rb
+lib/cocos/version.rb
