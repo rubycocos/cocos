@@ -1,15 +1,15 @@
 require 'hoe'
-require './lib/monofile/version.rb'
+require './lib/cocos/version.rb'
 
 
-Hoe.spec 'monofile' do
+Hoe.spec 'cocos' do
 
-  self.version = Mono::Module::Monofile::VERSION
+  self.version = Cocos::VERSION
 
-  self.summary = "monofile - read in / parse monorepo / mono source tree definitions - a list of git (and github) projects, and more"
+  self.summary = "cocos (code commons) - auto-incude quick-starter prelude & prolog"
   self.description = summary
 
-  self.urls = { home: 'https://github.com/rubycoco/monos' }
+  self.urls = { home: 'https://github.com/rubycocos/cocos' }
 
   self.author = 'Gerald Bauer'
   self.email = 'opensport@googlegroups.com'
