@@ -6,7 +6,7 @@ Hoe.spec 'cocos' do
 
   self.version = Cocos::VERSION
 
-  self.summary = "cocos (code commons) - auto-incude quick-starter prelude & prolog"
+  self.summary = "cocos (code commons) - auto-include quick-starter prelude & prolog"
   self.description = summary
 
   self.urls = { home: 'https://github.com/rubycocos/cocos' }
