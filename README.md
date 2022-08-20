@@ -1,8 +1,8 @@
 # cocos (code commons) - auto-include quick-starter prelude & prolog
 
 
-* home  :: [github.com/rubycocos/cococs](https://github.com/rubycocos/cococs)
-* bugs  :: [github.com/rubycocos/cococs/issues](https://github.com/rubycocos/cococs/issues)
+* home  :: [github.com/rubycocos/cocos](https://github.com/rubycocos/cocos)
+* bugs  :: [github.com/rubycocos/cocos/issues](https://github.com/rubycocos/cocos/issues)
 * gem   :: [rubygems.org/gems/cocos](https://rubygems.org/gems/cocos)
 * rdoc  :: [rubydoc.info/gems/cocos](http://rubydoc.info/gems/cocos)
 
