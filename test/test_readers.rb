@@ -75,9 +75,19 @@ BEER_HASH = [
 
 def test_csv
   assert_equal BEER_ARY, read_csv( "./test/data/beer.a.csv", headers: false )
+  assert_equal BEER_ARY, read_data( "./test/data/beer.a.csv" )
+
   assert_equal BEER_HASH, read_csv( "./test/data/beer.csv" )
 
   assert_equal BEER_ARY, parse_csv( <<TXT, headers: false )
+Andechser Klosterbrauerei,Andechs,Doppelbock Dunkel,7%
+Augustiner Bräu München,München,Edelstoff,5.6%
+Bayerische Staatsbrauerei Weihenstephan,Freising,Hefe Weissbier,5.4%
+Brauerei Spezial,Bamberg,Rauchbier Märzen,5.1%
+Hacker-Pschorr Bräu,München,Münchner Dunkel,5.0%
+Staatliches Hofbräuhaus München,München,Hofbräu Oktoberfestbier,6.3%
+TXT
+  assert_equal BEER_ARY, parse_data( <<TXT )
 Andechser Klosterbrauerei,Andechs,Doppelbock Dunkel,7%
 Augustiner Bräu München,München,Edelstoff,5.6%
 Bayerische Staatsbrauerei Weihenstephan,Freising,Hefe Weissbier,5.4%
@@ -177,6 +187,22 @@ title = Open Street Map (OSM) News
 link  = https://blog.openstreetmap.org
 feed  = https://blog.openstreetmap.org/feed/
 TXT
+end
+
+
+MARILYN_BLOB = Base64.decode64( <<TXT )
+iVBORw0KGgoAAAANSUhEUgAAABgAAAAYBAMAAAASWSDLAAAAHlBMVEUAAAAA
+V7dpDEWMDVuRdlatIWDEIRDbsYD/3QD/9o7AqwunAAAAsElEQVR4nGVQuxHD
+IAx9prHSwQqeIFtklBRp6Ox06owvjbsM4Z182SCkMlQE4Xx8Z50OeLz3QJIy
+m1DYxB448A8wHLsvyAeSJQNyzOAgSoXAslOgIgvFTPlKFcs8QxTZw3hAzaDV
+c+7HfrAiazuoJqpmwdLKP5WpKwPoLEuZkYSX19JtspfpUBi8Yhvr0+gLoxfU
+OFpdKnjm9EhprZpGoyP7T3NXxH+nNNw3M2C7H8gbfQo2YCHDJXQAAAAASUVO
+RK5CYII=
+TXT
+
+
+def test_blob
+  assert_equal MARILYN_BLOB, read_blob( "./test/data/marilyn.png" )
 end
 
 

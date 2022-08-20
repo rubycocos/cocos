@@ -22,6 +22,7 @@ require 'time'
 require 'date'
 require 'json'
 require 'yaml'
+require 'base64'
 require 'fileutils'
 
 require 'uri'
@@ -86,12 +87,16 @@ And so on.
 
 _Read / parse convenience short-cut helpers_
 
+`read_blob( path )` <br>
+also known as `read_binary` or `read_bin`
+
 
 `read_text( path )` <br>
 also known as `read_txt`
 
 
 `read_lines( path )`
+
 
 
 `read_json( path )` / `parse_json( str )`
@@ -104,6 +109,13 @@ also known as `read_txt`
 
 note: comma-separated values (.csv) reading & parsing service
 brought to you by the [**csvreader library / gem »**](https://github.com/rubycocos/csvreader/tree/master/csvreader)
+
+
+`read_data( path )` / `parse_data( str )`
+
+note:  alternate shortcut / alias for `read_csv( path, headers: false )` / `parse_csv( str, headers: false )`
+
+
 
 
 `read_tab( path )` / `parse_tab( str )`
