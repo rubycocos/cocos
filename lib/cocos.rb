@@ -23,6 +23,9 @@ require 'csvreader'
 require 'tabreader'
 require 'iniparser'
 
+require 'webclient'
+
+
 
 #####################
 # our own code
@@ -146,9 +149,69 @@ def read_lines( path )
 end
 
 
+
+
+######
+#  add writers
+
+def write_json( path, data )
+  ###
+  ## todo/check:  check if data is Webclient.Response?
+  ##   if yes use res.json  - why? why not?
+
+  dirname = File.dirname( path )
+  FileUtils.mkdir_p( dirname )  unless Dir.exist?( dirname )
+
+  ## note: pretty print/reformat json
+  File.open( path, "w:utf-8" ) do |f|
+     f.write( JSON.pretty_generate( data ))
+  end
+end
+
+
+def write_blob( path, blob )
+  ###
+  ## todo/check:  check if data is Webclient.Response?
+  ##   if yes use res.blob/body  - why? why not?
+
+  dirname = File.dirname( path )
+  FileUtils.mkdir_p( dirname )  unless Dir.exist?( dirname )
+
+  File.open( path, "wb" ) do |f|
+    f.write( blob )
+  end
+end
+alias_method :write_binary, :write_blob
+alias_method :write_bin,    :write_blob
+
+
+def write_text( path, text )
+  ###
+  ## todo/check:  check if data is Webclient.Response?
+  ##   if yes use res.text  - why? why not?
+
+  dirname = File.dirname( path )
+  FileUtils.mkdir_p( dirname )  unless Dir.exist?( dirname )
+
+  File.open( path, "w:utf-8" ) do |f|
+    f.write( text )
+  end
+end
+alias_method :write_txt,  :write_text
+
+
+
+######
+#   world wide web (www) support
+
+def wget( url, **kwargs )
+  Webclient.get( url, **kwargs )
+end
+##  add alias www_get or web_get - why? why not?
+
+
+
 end # module Kernel
-
-
 
 
 

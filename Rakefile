@@ -24,6 +24,7 @@ Hoe.spec 'cocos' do
     ['csvreader',      '>= 1.2.5'],
     ['tabreader',      '>= 1.0.1'],
     ['iniparser',      '>= 1.0.1'],
+    ['webclient',      '>= 0.2.2'],
   ]
 
   self.spec_extras = {
