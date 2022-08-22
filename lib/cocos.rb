@@ -12,7 +12,7 @@ require 'fileutils'
 require 'uri'
 require 'net/http'
 require 'net/https'
-
+require 'cgi'
 
 require 'optparse'    ## used by monofile (built-in test/debug) command line tool
 
