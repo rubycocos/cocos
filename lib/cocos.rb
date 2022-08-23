@@ -40,14 +40,35 @@ module Kernel
 
 
 
+################
+#  private helpers - keep along here - why? why not?
+
+##### check if path starts with http:// or https://
+##       if yes, assume it's a download
+DOWNLOAD_RX = %r{^https?://}i
+
+## note: hack - use !! to force nil (no match) to false
+##                         and matchdata to true
+def _download?( path )
+   !! DOWNLOAD_RX.match( path )
+end
+
+
+
 ## todo:  add symbolize options a la read_json
 ##         add sep options
 def read_csv( path, headers: true )
-   if headers
-      CsvHash.read( path )
+
+   if _download?( path )
+     parse_csv( _wget!( path ).text,
+                headers: headers )
    else
-      Csv.read( path )
-   end
+     if headers
+        CsvHash.read( path )
+     else
+        Csv.read( path )
+     end
+    end
 end
 
 def parse_csv( str, headers: true )
@@ -63,7 +84,11 @@ end
 ##  for alternate shortcut for read_csv / parse_csv w/ headers: false
 ##       returning arrays of strings
 def read_data( path )
-  Csv.read( path )
+  if _download?( path )
+    read_data( _wget!( path ).text )
+  else
+    Csv.read( path )
+  end
 end
 
 def parse_data( str )
@@ -73,7 +98,11 @@ end
 
 
 def read_tab( path )
-   Tab.read( path )
+  if _download?( path )
+    parse_tab( _wget!( path ).text )
+  else
+    Tab.read( path )
+  end
 end
 
 def parse_tab( str )
@@ -83,16 +112,17 @@ end
 
 ## todo:  add symbolize options ???
 def read_json( path )
-   JSON.parse( read_text( path ))
+  JSON.parse( read_text( path ))
 end
 
 def parse_json( str )
   JSON.parse( str )
 end
 
+
 ### todo/check:  use parse_safeyaml or such? (is default anyway?) - why? why not?
 def read_yaml( path )
-  YAML.load( read_text( path ))
+   YAML.load( read_text( path ))
 end
 
 def parse_yaml( str )
@@ -101,7 +131,7 @@ end
 
 
 def read_ini( path )
-  INI.load( read_text( path ))
+   INI.load( read_text( path ))
 end
 
 def parse_ini( str )
@@ -115,6 +145,9 @@ alias_method :parse_conf, :parse_ini
 
 
 def read_text( path )
+  if _download?( path )
+    _wget!( path ).text
+  else
    ## todo/check: add universal newline mode or such?
    ##  e.g. will always convert all
    ##    newline variants (\n|\r|\n\r) to "universal" \n only
@@ -122,15 +155,20 @@ def read_text( path )
                 f.read
           end
     txt
+  end
 end
 alias_method :read_txt, :read_text
 
 
 def read_blob( path )
-  blob =  File.open( path, 'rb' ) do |f|
-                  f.read
-          end
-  blob
+  if _download?( path )
+    _wget!( path ).blob
+  else
+    blob =  File.open( path, 'rb' ) do |f|
+                   f.read
+            end
+    blob
+  end
 end
 alias_method :read_binary, :read_blob
 alias_method :read_bin,    :read_blob
@@ -140,12 +178,15 @@ alias_method :read_bin,    :read_blob
 
 ## todo/check: remove \n (or\r or \r\n) from line
 ##   ruby (by default) keeps the newline - follow tradition? why? why not?
+##   add/offer chomp: true/false option or such - why? why not?
+##    see String.lines in rdoc
 ##
 def read_lines( path )
-    lines = File.open( path, 'r:utf-8' ) do |f|
-               f.readlines
-            end
-    lines
+  read_text( path ).lines
+end
+
+def parse_lines( str )
+  str.lines
 end
 
 
@@ -209,6 +250,17 @@ def wget( url, **kwargs )
 end
 ##  add alias www_get or web_get - why? why not?
 
+
+
+## private helper - make public -why? why not?
+def _wget!( url, **kwargs )
+  res = Webclient.get( url, **kwargs )
+
+  ##  check/todo - use a different exception/error - keep RuntimeError - why? why not?
+  raise RuntimeError, "HTTP #{res.status.code} - #{res.status.message}"   if res.status.nok?
+
+  res
+end
 
 
 end # module Kernel
