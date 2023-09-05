@@ -30,7 +30,7 @@ require 'webclient'
 #####################
 # our own code
 require 'cocos/version'   # note: let version always go first
-
+require 'cocos/env'       ## e.g. EnvParser
 
 ###
 ##  read/parse convenience/helper shortcuts
@@ -151,6 +151,8 @@ def read_text( path )
    ## todo/check: add universal newline mode or such?
    ##  e.g. will always convert all
    ##    newline variants (\n|\r|\n\r) to "universal" \n only
+   ##
+   ##  add r:bom  - why? why not?
     txt = File.open( path, 'r:utf-8' ) do |f|
                 f.read
           end
@@ -191,6 +193,33 @@ end
 
 
 
+def read_env( path )
+   EnvParser.load( read_text( path ))
+end
+
+def parse_env( str )
+   EnvParser.load( str )
+end
+
+
+##
+##  todo/check - change path to *paths=['./.env']
+##                   and support more files - why? why not?
+def load_env( path='./.env' )
+  if File.exist?( path )
+     puts "==> loading .env settings..."
+     env = read_env( path )
+     puts "    applying .env settings... (merging into ENV)"
+     pp env
+     ## note: will only add .env setting if NOT present in ENV!!!
+     env.each do |k,v|
+         ENV[k] ||= v
+     end
+  end
+end
+
+
+
 
 ######
 #  add writers
@@ -204,7 +233,7 @@ def write_json( path, data )
   FileUtils.mkdir_p( dirname )  unless Dir.exist?( dirname )
 
   ## note: pretty print/reformat json
-  File.open( path, "w:utf-8" ) do |f|
+  File.open( path, 'w:utf-8' ) do |f|
      f.write( JSON.pretty_generate( data ))
   end
 end
@@ -218,7 +247,7 @@ def write_blob( path, blob )
   dirname = File.dirname( path )
   FileUtils.mkdir_p( dirname )  unless Dir.exist?( dirname )
 
-  File.open( path, "wb" ) do |f|
+  File.open( path, 'wb' ) do |f|
     f.write( blob )
   end
 end
@@ -234,7 +263,7 @@ def write_text( path, text )
   dirname = File.dirname( path )
   FileUtils.mkdir_p( dirname )  unless Dir.exist?( dirname )
 
-  File.open( path, "w:utf-8" ) do |f|
+  File.open( path, 'w:utf-8' ) do |f|
     f.write( text )
   end
 end

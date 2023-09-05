@@ -4,4 +4,5 @@ Manifest.txt
 README.md
 Rakefile
 lib/cocos.rb
+lib/cocos/env.rb
 lib/cocos/version.rb
