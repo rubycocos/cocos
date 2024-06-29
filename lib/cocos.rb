@@ -271,6 +271,41 @@ alias_method :write_txt,  :write_text
 
 
 
+#
+# note:
+#  for now write_csv expects array of string arrays
+#     does NOT support array of hashes for now 
+
+def write_csv( path, recs, headers: nil )
+  dirname = File.dirname( path )
+  FileUtils.mkdir_p( dirname )  unless Dir.exist?( dirname )
+
+  File.open( path, 'w:utf-8' ) do |f|
+    if headers 
+      f.write( headers.join(','))   ## e.g. Date,Team 1,FT,HT,Team 2
+      f.write( "\n" )
+    end  
+
+    recs.each do |values|
+      ## quote values that incl. a comma 
+      ##  todo/fix - add more escape/quote checks - why? why not?
+      ##   check how other csv libs handle value generation
+      buf =  values.map do |value|
+               if value.index(',')
+                  %Q{"#{value}"}
+               else
+                  value
+               end
+             end.join( ',' )
+  
+      f.write( buf )
+      f.write( "\n" )
+    end 
+  end
+end
+
+
+
 ######
 #   world wide web (www) support
 
