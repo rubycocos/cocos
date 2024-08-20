@@ -3,10 +3,10 @@
 #     ruby -I ./lib -I ./test test/test_env.rb
 
 
-require 'helper'
+require_relative 'helper'
 
 
-class TestEnv < MiniTest::Test
+class TestEnv < Minitest::Test
 
 ENV_TXT =<<TXT
 # comment here

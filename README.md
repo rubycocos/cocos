@@ -87,8 +87,7 @@ And so on.
 
 _Read / parse convenience short-cut helpers_
 
-`read_blob( path )` <br>
-also known as `read_binary` or `read_bin`
+`read_blob( path )`
 
 
 `read_text( path )` <br>
@@ -98,14 +97,14 @@ also known as `read_txt`
 `read_lines( path )`
 
 
-
 `read_json( path )` / `parse_json( str )`
 
 
-`read_yaml( path )` / `parse_yaml( str )`
+`read_yaml( path )` / `parse_yaml( str )` <br>
+also known as `read_yml` / `parse_yml`
 
 
-`read_csv( path, headers: true )` / `parse_csv( str, headers: true )`
+`read_csv( path )` / `parse_csv( str )`
 
 note: comma-separated values (.csv) reading & parsing service
 brought to you by the [**csvreader library / gem »**](https://github.com/rubycocos/csvreader/tree/master/csvreader)
@@ -113,8 +112,7 @@ brought to you by the [**csvreader library / gem »**](https://github.com/rubyco
 
 `read_data( path )` / `parse_data( str )`
 
-note:  alternate shortcut / alias for `read_csv( path, headers: false )` / `parse_csv( str, headers: false )`
-
+note:  alternate csv reader / parser; reads data WITHOUT headers, that is, named columns - returns data array not named hash (table)
 
 
 
@@ -122,7 +120,6 @@ note:  alternate shortcut / alias for `read_csv( path, headers: false )` / `pars
 
 note: tabulator (`\t`)-separated values (.tab) reading & parsing service
 brought to you by the [**tabreader library / gem »**](https://github.com/rubycocos/csvreader/tree/master/tabreader)
-
 
 
 

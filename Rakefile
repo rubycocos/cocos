@@ -12,7 +12,7 @@ Hoe.spec 'cocos' do
   self.urls = { home: 'https://github.com/rubycocos/cocos' }
 
   self.author = 'Gerald Bauer'
-  self.email = 'opensport@googlegroups.com'
+  self.email = 'gerald.bauer@gmail.com'
 
   # switch extension to .markdown for gihub formatting
   self.readme_file  = 'README.md'

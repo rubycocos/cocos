@@ -29,8 +29,9 @@ require 'webclient'
 
 #####################
 # our own code
-require 'cocos/version'   # note: let version always go first
-require 'cocos/env'       ## e.g. EnvParser
+require_relative 'cocos/version'   # note: let version always go first
+require_relative 'cocos/env'       ## e.g. EnvParser
+
 
 ###
 ##  read/parse convenience/helper shortcuts
@@ -43,138 +44,153 @@ module Kernel
 ################
 #  private helpers - keep along here - why? why not?
 
-##### check if path starts with http:// or https://
-##       if yes, assume it's a download
-DOWNLOAD_RX = %r{^https?://}i
 
-## note: hack - use !! to force nil (no match) to false
-##                         and matchdata to true
-def _download?( path )
-   !! DOWNLOAD_RX.match( path )
-end
-
-
-
-## todo:  add symbolize options a la read_json
+## todo:  add symbolize options a la read_json? - why? why not?
 ##         add sep options
-def read_csv( path, headers: true )
 
-   if _download?( path )
-     parse_csv( _wget!( path ).text,
-                headers: headers )
-   else
-     if headers
-        CsvHash.read( path )
-     else
-        Csv.read( path )
-     end
-    end
+def read_csv( path, sep: nil )
+  opts = {}
+  opts[:sep] = sep  if sep
+
+  CsvHash.read( path, **opts )
 end
 
-def parse_csv( str, headers: true )
-  if headers
-    CsvHash.parse( str )
-  else
-    Csv.parse( str )
-  end
+def parse_csv( str, sep: nil )
+  opts = {}
+  opts[:sep] = sep  if sep
+
+  CsvHash.parse( str, **opts )
 end
+
+
+##  note - use explicit download for now
+##
+def download_csv( url, sep: nil )
+  opts = {}
+  opts[:sep] = sep  if sep
+
+  parse_csv( download_text( url ),
+              **opts )
+end
+
 
 
 ### note: use read_data / parse_data
 ##  for alternate shortcut for read_csv / parse_csv w/ headers: false
 ##       returning arrays of strings
 def read_data( path )
-  if _download?( path )
-    read_data( _wget!( path ).text )
-  else
-    Csv.read( path )
-  end
+  Csv.read( path )
 end
 
 def parse_data( str )
   Csv.parse( str )
 end
 
+def download_data( url )
+  parse_data( download_text( url ))
+end
+
 
 
 def read_tab( path )
-  if _download?( path )
-    parse_tab( _wget!( path ).text )
-  else
-    Tab.read( path )
-  end
+  Tab.read( path )
 end
 
 def parse_tab( str )
   Tab.parse( str )
 end
 
+def download_tab( url )
+  parse_tab( download_text( url ))
+end
+
+
 
 ## todo:  add symbolize options ???
 def read_json( path )
-  JSON.parse( read_text( path ))
+  parse_json( read_text( path ))
 end
 
 def parse_json( str )
   JSON.parse( str )
 end
 
+def download_json( url )
+  parse_json( download_text( url ))
+end
+
 
 ### todo/check:  use parse_safeyaml or such? (is default anyway?) - why? why not?
 def read_yaml( path )
-   YAML.load( read_text( path ))
+   parse_yaml( read_text( path ))
 end
 
 def parse_yaml( str )
   YAML.load( str )
 end
 
+def download_yaml( url )
+   parse_yaml( download_text( url ))
+end
+
+## keep yml alias - why? why not?
+alias_method :read_yml,     :read_yaml
+alias_method :parse_yml,    :parse_yaml
+alias_method :download_yml, :download_yaml
+
 
 def read_ini( path )
-   INI.load( read_text( path ))
+   parse_ini( read_text( path ))
 end
 
 def parse_ini( str )
   INI.load( str )
 end
 
+def download_ini( url )
+   parse_ini( download_text( url ))
+end
+
 alias_method :read_conf, :read_ini
 alias_method :parse_conf, :parse_ini
+alias_method :download_conf, :download_ini
 
 
 
 
 def read_text( path )
-  if _download?( path )
-    _wget!( path ).text
-  else
    ## todo/check: add universal newline mode or such?
    ##  e.g. will always convert all
    ##    newline variants (\n|\r|\n\r) to "universal" \n only
    ##
    ##  add r:bom  - why? why not?
-    txt = File.open( path, 'r:utf-8' ) do |f|
-                f.read
-          end
-    txt
-  end
+    File.open( path, 'r:utf-8' ) do |f|
+        f.read
+    end
 end
-alias_method :read_txt, :read_text
+
+def download_text( url )
+  wget!( url ).text
+end
+
+alias_method :read_txt,     :read_text
+alias_method :download_txt, :download_text
+
 
 
 def read_blob( path )
-  if _download?( path )
-    _wget!( path ).blob
-  else
-    blob =  File.open( path, 'rb' ) do |f|
-                   f.read
-            end
-    blob
-  end
+    File.open( path, 'rb' ) do |f|
+        f.read
+    end
 end
-alias_method :read_binary, :read_blob
-alias_method :read_bin,    :read_blob
+## alias_method :read_binary, :read_blob
+## alias_method :read_bin,    :read_blob
 
+def download_blob( url )
+   wget!( url ).blob
+end
+## alias_method :download_binary, :download_blob
+## alias_method :download_bin,    :download_blob
 
 
 
@@ -191,10 +207,14 @@ def parse_lines( str )
   str.lines
 end
 
+def download_lines( url )
+  parse_lines( download_text( url ))
+end
+
 
 
 def read_env( path )
-   EnvParser.load( read_text( path ))
+   parse_env( read_text( path ))
 end
 
 def parse_env( str )
@@ -251,8 +271,8 @@ def write_blob( path, blob )
     f.write( blob )
   end
 end
-alias_method :write_binary, :write_blob
-alias_method :write_bin,    :write_blob
+# alias_method :write_binary, :write_blob
+# alias_method :write_bin,    :write_blob
 
 
 def write_text( path, text )
@@ -274,20 +294,20 @@ alias_method :write_txt,  :write_text
 #
 # note:
 #  for now write_csv expects array of string arrays
-#     does NOT support array of hashes for now 
+#     does NOT support array of hashes for now
 
 def write_csv( path, recs, headers: nil )
   dirname = File.dirname( path )
   FileUtils.mkdir_p( dirname )  unless Dir.exist?( dirname )
 
   File.open( path, 'w:utf-8' ) do |f|
-    if headers 
+    if headers
       f.write( headers.join(','))   ## e.g. Date,Team 1,FT,HT,Team 2
       f.write( "\n" )
-    end  
+    end
 
     recs.each do |values|
-      ## quote values that incl. a comma 
+      ## quote values that incl. a comma
       ##  todo/fix - add more escape/quote checks - why? why not?
       ##   check how other csv libs handle value generation
       buf =  values.map do |value|
@@ -297,10 +317,10 @@ def write_csv( path, recs, headers: nil )
                   value
                end
              end.join( ',' )
-  
+
       f.write( buf )
       f.write( "\n" )
-    end 
+    end
   end
 end
 
@@ -309,16 +329,13 @@ end
 ######
 #   world wide web (www) support
 
-def wget( url, **kwargs )
-  Webclient.get( url, **kwargs )
+def wget( url, **opts )
+  Webclient.get( url, **opts )
 end
 ##  add alias www_get or web_get - why? why not?
 
-
-
-## private helper - make public -why? why not?
-def _wget!( url, **kwargs )
-  res = Webclient.get( url, **kwargs )
+def wget!( url, **opts )
+  res = Webclient.get( url, **opts )
 
   ##  check/todo - use a different exception/error - keep RuntimeError - why? why not?
   raise RuntimeError, "HTTP #{res.status.code} - #{res.status.message}"   if res.status.nok?

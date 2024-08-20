@@ -3,10 +3,10 @@
 #     ruby -I ./lib -I ./test test/test_readers.rb
 
 
-require 'helper'
+require_relative 'helper'
 
 
-class TestReaders < MiniTest::Test
+class TestReaders < Minitest::Test
 
 MANIFEST_TXT =<<TXT
 CHANGELOG.md
@@ -74,19 +74,10 @@ BEER_HASH = [
    "Abv"=>"6.3%"}]
 
 def test_csv
-  assert_equal BEER_ARY, read_csv( "./test/data/beer.a.csv", headers: false )
   assert_equal BEER_ARY, read_data( "./test/data/beer.a.csv" )
 
   assert_equal BEER_HASH, read_csv( "./test/data/beer.csv" )
 
-  assert_equal BEER_ARY, parse_csv( <<TXT, headers: false )
-Andechser Klosterbrauerei,Andechs,Doppelbock Dunkel,7%
-Augustiner Bräu München,München,Edelstoff,5.6%
-Bayerische Staatsbrauerei Weihenstephan,Freising,Hefe Weissbier,5.4%
-Brauerei Spezial,Bamberg,Rauchbier Märzen,5.1%
-Hacker-Pschorr Bräu,München,Münchner Dunkel,5.0%
-Staatliches Hofbräuhaus München,München,Hofbräu Oktoberfestbier,6.3%
-TXT
   assert_equal BEER_ARY, parse_data( <<TXT )
 Andechser Klosterbrauerei,Andechs,Doppelbock Dunkel,7%
 Augustiner Bräu München,München,Edelstoff,5.6%

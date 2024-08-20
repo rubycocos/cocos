@@ -20,7 +20,7 @@ write_json( "./tmp/moonbird.json", res.json )
 
 
 puts
-pp read_json( 'https://live---metadata-5covpqijaa-uc.a.run.app/metadata/0' )
+pp download_json( 'https://live---metadata-5covpqijaa-uc.a.run.app/metadata/0' )
 
 
 
@@ -38,7 +38,7 @@ pp res.content_length
 
 write_blob( "./tmp/moonbird1a.png", res.blob )
 
-write_blob( "./tmp/moonbird1b.png", read_blob( 'https://live---metadata-5covpqijaa-uc.a.run.app/images/0' ))
+write_blob( "./tmp/moonbird1b.png", download_blob( 'https://live---metadata-5covpqijaa-uc.a.run.app/images/0' ))
 
 puts "bye"
 
