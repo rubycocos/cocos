@@ -2,7 +2,7 @@
 # simple read_env, load_env machinery
 ##   inspired by
 ##      dotenv gem -> https://github.com/bkeepers/dotenv
-##      figaro     -> https://github.com/laserlemon/figaro  
+##      figaro     -> https://github.com/laserlemon/figaro
 ##      and others
 
 
@@ -19,54 +19,59 @@ module EnvParser
         parse( text )
     end
     def self.load( text )   parse( text ); end
- 
-    
+
+
     class Error < StandardError; end
-  
+
     ## todo/check - what is JSON and YAML returning Parser/ParseError something else?
     ##  YAML uses ParseError  and JSON uses ParserError
     class ParseError < Error; end
-  
+
 
     ## todo/check - if support for empty values e.g. abc=  is required/possible???
     ##  todo/ addd support for quoted values - why? why not?
     ##  add support for "inline" end of line comments - why? why not?
     ##  add support for escapes and multi-line values - why? why not?
-LINE_RX = /\A(?<key>[A-Za-z][A-Za-z0-9_-]*)
+LINE_RE = /\A
+                 [ ]*
+             (?<key> [A-Za-z][A-Za-z0-9_-]*)
                  [ ]*
                    =
                  [ ]*
                (?<value>.+?)    ## non-greedy
+                 [ ]*
               \z
              /x
 
-  ## use a parser class - why? why not?
-  def self.parse( text )
-   h = {}
+## use a parser class - why? why not?
+def self.parse( text )
+  h = {}
 
-   lineno = 0   
+  lineno = 0
   text.each_line do |line|
     lineno += 1    ## track line numbers for (parse) error reporting
-
     line = line.strip   ## check: use strip (or be more strict) - why? why not?
-    ## skip empty and comment lines
-    next if line.empty? || line.start_with?( '#' )
 
-    if m=LINE_RX.match(line)
+    ## skip empty and comment lines
+    next   if line.empty? || line.start_with?( '#' )
+    ##  support __END__ marker for inline comments
+    break  if line == '__END__'
+
+    if m=LINE_RE.match(line)
       key   = m[:key]
       value = m[:value]
-      
+
       ## todo/check - check/warn about duplicates - why? why not?
       h[key] = value
-   else 
+    else
       raise ParseError,  "line #{lineno} - unknown line type; cannot parse >#{line}<"
-   end
+    end
   end
   h
 end   # methdod self.parse
 end  # module EnvParser
 
-  
+
 
 __END__
 

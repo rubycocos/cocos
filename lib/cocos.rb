@@ -33,6 +33,9 @@ require_relative 'cocos/version'   # note: let version always go first
 require_relative 'cocos/env'       ## e.g. EnvParser
 
 
+require_relative 'cocos/find_file'
+
+
 ###
 ##  read/parse convenience/helper shortcuts
 
@@ -151,8 +154,8 @@ def download_ini( url )
    parse_ini( download_text( url ))
 end
 
-alias_method :read_conf, :read_ini
-alias_method :parse_conf, :parse_ini
+alias_method :read_conf,     :read_ini
+alias_method :parse_conf,    :parse_ini
 alias_method :download_conf, :download_ini
 
 
@@ -222,11 +225,17 @@ def parse_env( str )
 end
 
 
+
+
 ##
 ##  todo/check - change path to *paths=['./.env']
 ##                   and support more files - why? why not?
+##
+##  note - use File.file? instead of File.exist?
+##              will avoid matching directories!
+
 def load_env( path='./.env' )
-  if File.exist?( path )
+  if File.file?( path )
      puts "==> loading .env settings..."
      env = read_env( path )
      puts "    applying .env settings... (merging into ENV)"
@@ -291,7 +300,7 @@ alias_method :write_txt,  :write_text
 
 
 
-#
+
 # note:
 #  for now write_csv expects array of string arrays
 #     does NOT support array of hashes for now
@@ -301,21 +310,16 @@ def write_csv( path, recs, headers: nil )
   FileUtils.mkdir_p( dirname )  unless Dir.exist?( dirname )
 
   File.open( path, 'w:utf-8' ) do |f|
-    if headers
-      f.write( headers.join(','))   ## e.g. Date,Team 1,FT,HT,Team 2
+    if headers     ## e.g. Date,Team 1,FT,HT,Team 2
+      f.write( headers.map do |header|
+                  _escape_csv( header )
+                end.join(',') )
       f.write( "\n" )
     end
 
     recs.each do |values|
-      ## quote values that incl. a comma
-      ##  todo/fix - add more escape/quote checks - why? why not?
-      ##   check how other csv libs handle value generation
       buf =  values.map do |value|
-               if value.index(',')
-                  %Q{"#{value}"}
-               else
-                  value
-               end
+               _escape_csv( value )
              end.join( ',' )
 
       f.write( buf )
@@ -323,6 +327,50 @@ def write_csv( path, recs, headers: nil )
     end
   end
 end
+
+
+
+## quote values that incl. a comma
+##  todo/fix - add more escape/quote checks - why? why not?
+##   check how other csv libs handle value generation
+##
+## If a field contains
+## - a comma  (,)
+## - a double quote (")
+## - a newline  (\r\n)
+##  then wrap the field in quotes
+##  Inside quoted fields, double every double quote (" → "")
+
+def _escape_csv(value)
+  ## auto-convert to string or let code fail on nil or such?
+  value = value.to_s
+
+   ## note - double double quotes (") for now only
+   ##  check
+   ##    -  escape newline (lf) as \n or keep it literal - why? why not?
+   ##            what about  \r carriage return (cr)
+   ##
+   ##  add value.match?(/\A\s|\s\z/) ||
+   ##    to preserve leading/trailing spaces in value ???
+   ##    e.g.   _a_ becomes "_a_" written out
+   ##
+   ##  quote empty strings or keep them empty
+   ##   what about nil - for now empty string too
+   ##    add nil_value option e.g. 'n/a' or such
+   ##     and quote_empty true|false - why? why not?
+  if value.include?(',')  ||
+     value.include?('"')  ||
+     value.include?("\n") ||
+     value.include?("\r")
+    '"' + value.gsub('"', '""') + '"'
+  else
+    value
+  end
+end
+
+
+
+
 
 
 
@@ -356,4 +404,3 @@ Coco = Cocos
 
 
 puts Cocos.banner   ## say hello
-
