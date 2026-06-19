@@ -8,6 +8,8 @@ require 'json'
 require 'yaml'
 require 'base64'    ## e.g. Base64.decode64,Base64.encode64,...
 require 'fileutils'
+require 'pathname'  ## used by find_file/find_dir to check for absolute? etc.
+
 
 require 'uri'
 require 'net/http'
@@ -40,9 +42,8 @@ require_relative 'cocos/find_file'
 ##  read/parse convenience/helper shortcuts
 
 
+
 module Kernel
-
-
 
 ################
 #  private helpers - keep along here - why? why not?
@@ -50,6 +51,20 @@ module Kernel
 
 ## todo:  add symbolize options a la read_json? - why? why not?
 ##         add sep options
+
+  ##
+  ##  todo - add upstream
+  ##            to CsvHash.read
+  ##                    newline option on read/write and
+  ##                     bom    option on read
+  ## note:
+  ##  (i) :newline => :lf option
+  #      Reads text natively; normalizes all incoming newlines to strict LF (\n)
+  ##  (ii) 'bom|' flag
+  ##   The 'bom|' flag instructs Ruby to drop the BOM bytes if they exist
+  ##  File.open( path, 'r:bom|utf-8', newline: :lf) do |f|
+
+
 
 def read_csv( path, sep: nil )
   opts = {}
@@ -108,6 +123,10 @@ def download_tab( url )
 end
 
 
+##  fix-fix-fix
+##    for json  add new strict: true|false option (default is false!)
+##       add   option for allowing trailing_commas and comments!!!
+##         see JSON.parse  for more
 
 ## todo:  add symbolize options ???
 def read_json( path )
@@ -160,14 +179,13 @@ alias_method :download_conf, :download_ini
 
 
 
-
 def read_text( path )
-   ## todo/check: add universal newline mode or such?
-   ##  e.g. will always convert all
-   ##    newline variants (\n|\r|\n\r) to "universal" \n only
-   ##
-   ##  add r:bom  - why? why not?
-    File.open( path, 'r:utf-8' ) do |f|
+  ## note:
+  ##  (i) :newline => :lf option
+  #      Reads text natively; normalizes all incoming newlines to strict LF (\n)
+  ##  (ii) 'bom|' flag
+  ##   The 'bom|' flag instructs Ruby to drop the BOM bytes if they exist
+    File.open( path, 'r:bom|utf-8', newline: :lf) do |f|
         f.read
     end
 end
@@ -202,17 +220,22 @@ end
 ##   add/offer chomp: true/false option or such - why? why not?
 ##    see String.lines in rdoc
 ##
-def read_lines( path )
-  read_text( path ).lines
+##
+##  yes, add chomp: true|false option
+##     note - default is chomp: false (keeping the trailing newline)
+
+def read_lines( path, chomp: false )
+  read_text( path ).lines( chomp: chomp )
 end
 
-def parse_lines( str )
-  str.lines
+def parse_lines( str, chomp: false )
+  str.lines( chomp: chomp )
 end
 
-def download_lines( url )
-  parse_lines( download_text( url ))
+def download_lines( url, chomp: false )
+  parse_lines( download_text( url ), chomp: chomp )
 end
+
 
 
 
@@ -250,6 +273,7 @@ end
 
 
 
+
 ######
 #  add writers
 
@@ -262,7 +286,9 @@ def write_json( path, data )
   FileUtils.mkdir_p( dirname )  unless Dir.exist?( dirname )
 
   ## note: pretty print/reformat json
-  File.open( path, 'w:utf-8' ) do |f|
+  ## note: on windows ruby translates \n to \r\n
+  ##          use newline option to use \n everywhere!!
+  File.open( path, 'w:utf-8', newline: :lf) do |f|
      f.write( JSON.pretty_generate( data ))
   end
 end
@@ -292,7 +318,9 @@ def write_text( path, text )
   dirname = File.dirname( path )
   FileUtils.mkdir_p( dirname )  unless Dir.exist?( dirname )
 
-  File.open( path, 'w:utf-8' ) do |f|
+  ## note: on windows ruby translates \n to \r\n
+  ##          use newline option to use \n everywhere!!
+  File.open( path, 'w:utf-8', newline: :lf) do |f|
     f.write( text )
   end
 end
@@ -309,7 +337,9 @@ def write_csv( path, recs, headers: nil )
   dirname = File.dirname( path )
   FileUtils.mkdir_p( dirname )  unless Dir.exist?( dirname )
 
-  File.open( path, 'w:utf-8' ) do |f|
+  ## note: on windows ruby translates \n to \r\n
+  ##          use newline option to use \n everywhere!!
+  File.open( path, 'w:utf-8', newline: :lf) do |f|
     if headers     ## e.g. Date,Team 1,FT,HT,Team 2
       f.write( headers.map do |header|
                   _escape_csv( header )
@@ -341,8 +371,10 @@ end
 ##  then wrap the field in quotes
 ##  Inside quoted fields, double every double quote (" → "")
 
+
 def _escape_csv(value)
   ## auto-convert to string or let code fail on nil or such?
+  ##  or use value.to_str - why? why not?
   value = value.to_s
 
    ## note - double double quotes (") for now only
@@ -376,6 +408,12 @@ end
 
 ######
 #   world wide web (www) support
+
+##
+##  keep wget/wget! support - why? why not?
+##    check if used outside anywhere
+##    add deprecated warning - why? why not?
+
 
 def wget( url, **opts )
   Webclient.get( url, **opts )

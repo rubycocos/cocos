@@ -13,9 +13,9 @@ module EnvParser
     # returns a hash
     #  (compatible structure - works like YAML.load_file)
     #
-    #   change to .read(path) and parse( text) - why? why not?
+    #   change to .read(path) and parse(text) - why? why not?
     def self.load_file( path )
-        text = File.open( path, 'r:utf-8' ) { |f| f.read }
+        text = File.open( path, 'r:bom|utf-8', newline: :lf) { |f| f.read }
         parse( text )
     end
     def self.load( text )   parse( text ); end
@@ -32,7 +32,7 @@ module EnvParser
     ##  todo/ addd support for quoted values - why? why not?
     ##  add support for "inline" end of line comments - why? why not?
     ##  add support for escapes and multi-line values - why? why not?
-LINE_RE = /\A
+LINE_RE =  %r{\A
                  [ ]*
              (?<key> [A-Za-z][A-Za-z0-9_-]*)
                  [ ]*
@@ -41,7 +41,7 @@ LINE_RE = /\A
                (?<value>.+?)    ## non-greedy
                  [ ]*
               \z
-             /x
+             }x
 
 ## use a parser class - why? why not?
 def self.parse( text )

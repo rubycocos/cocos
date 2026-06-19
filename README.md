@@ -50,7 +50,7 @@ txt = File.read( "history.txt" )
 # (e.g. on microsoft windows it is ISO Code Page (CP-1252
 # or something - depending on your locale/culture/language)
 
-txt = File.open( "history.txt", "r:utf-8" ) do |f|
+txt = File.open( "history.txt", "r:bom|utf-8" ) do |f|
              f.read
          end
 ```
@@ -61,7 +61,7 @@ and always repeating the same open / read and code block dance
 again and again e.g.:
 
 ``` ruby
-txt  = File.open( "history.json", "r:utf-8" ) do |f|
+txt  = File.open( "history.json", "r:bom|utf-8" ) do |f|
              f.read
          end
 data = JSON.parse( txt )
@@ -94,7 +94,7 @@ _Read / parse convenience short-cut helpers_
 also known as `read_txt`
 
 
-`read_lines( path )`
+`read_lines( path, chomp: true|false )`
 
 
 `read_json( path )` / `parse_json( str )`
@@ -138,5 +138,4 @@ That's it for now.
 ## License
 
 The `cocos` scripts are dedicated to the public domain.
-Use it as you please with no restrictions whatsoever.
-
+Use as you please with no restrictions whatsoever.

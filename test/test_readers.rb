@@ -33,9 +33,22 @@ MANIFEST_LINES = [
   "lib/cocos/version.rb\n",
 ]
 
+MANIFEST_LINES_CHOMPED = [
+  "CHANGELOG.md",
+  "LICENSE.md",
+  "Manifest.txt",
+  "README.md",
+  "Rakefile",
+  "lib/cocos.rb",
+  "lib/cocos/version.rb",
+]
+
+
 def test_lines
-  assert_equal MANIFEST_LINES, read_lines( "./test/data/manifest.txt" )
+  assert_equal MANIFEST_LINES,         read_lines( "./test/data/manifest.txt" )
+  assert_equal MANIFEST_LINES_CHOMPED, read_lines( "./test/data/manifest.txt", chomp: true )
 end
+
 
 
 BEER_ARY = [
