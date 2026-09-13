@@ -435,6 +435,19 @@ end # module Kernel
 
 
 
+require_relative 'cocos/words'    ## pulls in parse_words/wordarray
+
+###
+##   try add kernel global methods via module
+module Kernel
+  include Cocos::FileUtils
+  include Cocos::Find        # e.g. find_file, find_dir, etc.
+end  ## module Kernel
+
+
+
+
+
 
 ####
 #  convenience alias  (use plural or singual)

@@ -7,3 +7,4 @@ lib/cocos.rb
 lib/cocos/env.rb
 lib/cocos/find_file.rb
 lib/cocos/version.rb
+lib/cocos/words.rb

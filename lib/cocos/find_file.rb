@@ -1,3 +1,5 @@
+module Cocos
+  module  Find
 
 
 ##
@@ -12,8 +14,6 @@
 ##    golang  lookup_path or such
 ##     always return absolute (expanded) path - why? why not?
 
-
-module Kernel
 
 def find_file!( name, path: )
     filepath = find_file( name, path: path )
@@ -79,5 +79,5 @@ def find_dir( name, path: [] )
 end
 
 
-
-end  # module Kernel
+end  ## module  Find
+end  ## module Cocos
